@@ -23,7 +23,7 @@ app.post("/signup", async (req, res) => {
   try {
     const { email, name, password } = req.body;
 
-    const user = await prisma.user.create({
+    const user = await prisma.users.create({
       data: { email, name, password }
     });
 
@@ -36,7 +36,7 @@ app.post("/signup", async (req, res) => {
 
 // Get users
 app.get("/users", async (req, res) => {
-  const users = await prisma.user.findMany();
+  const users = await prisma.users.findMany();
   res.json(users);
 });
 

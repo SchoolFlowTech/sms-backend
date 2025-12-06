@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { studentResolvers } from "./studentResolver.js";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -17,6 +18,7 @@ const resolvers = {
       if (!context.userId) throw new Error("Not authenticated");
       return prisma.users.findUnique({ where: { id: context.userId } });
     },
+    ...studentResolvers.Query
   },
   Mutation: {
     signup: async (_parent, args) => {
@@ -46,6 +48,7 @@ const resolvers = {
 
       return { token, user };
     },
+    ...studentResolvers.Mutation
   },
 };
 

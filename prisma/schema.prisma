@@ -21,3 +21,19 @@ enum roles {
   teacher
   parent
 }
+
+model student {
+  studentId Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  gender String
+  dateOfBirth String
+  mobileNumber String
+  address String
+  class String
+  section String
+  rollNumber String
+  admissionDate String
+  status String
+
+}

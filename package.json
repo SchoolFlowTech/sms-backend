@@ -14,15 +14,17 @@
     "node": ">=16"
   },
   "dependencies": {
-    "@prisma/client": "latest",
-    "apollo-server-express": "latest",
+    "@prisma/client": "6.19.0",
+    "apollo-server-express": "^3.13.0",
+    "bcrypt": "^6.0.0",
     "cors": "latest",
     "dotenv": "latest",
     "express": "latest",
-    "graphql": "latest"
+    "graphql": "^16.12.0",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "nodemon": "latest",
-    "prisma": "latest"
+    "prisma": "6.19.0"
   }
 }

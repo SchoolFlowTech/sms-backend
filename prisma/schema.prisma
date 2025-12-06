@@ -8,12 +8,16 @@ datasource db {
 }
 
 model users {
-  id        String   @id @default(cuid())
+  id        Int   @id @default(autoincrement())
   email     String   @unique
   name      String?
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  @@map("users")
+  role      roles
+}
 
+enum roles {
+  admin
+  student
+  teacher
+  parent
 }

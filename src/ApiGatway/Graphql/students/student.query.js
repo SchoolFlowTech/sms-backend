@@ -1,9 +1,7 @@
 import { gql } from "apollo-server-express";
 
-export const QueryType = gql`
-    type Query {
-        users: UserResponse!
-        me: meResponse!
+export const studentQuery = gql`
+      extend type Query {
         students: allStudentResponse
         student(studentId: Int!): getStudentByIdResponse
     }

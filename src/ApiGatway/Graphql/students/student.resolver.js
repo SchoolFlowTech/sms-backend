@@ -1,15 +1,18 @@
-import prisma from "../../../utils/prismaClient.js";
+import prisma from "../../utils/prismaClient.js";
 import { validateStudent } from "./validateStudent.js";
-import { success, failed } from "../../../utils/response.js";
+import { success, failed } from "../../utils/response.js";
 
 export const studentResolvers = {
     Query: {
         students: async (_parent, _args, context) => {
+            console.log("usercontext",context.userId)
             if (!context.userId) return failed("Not authenticated");
-            const students = prisma.student.findMany();
+            const students = await prisma.student.findMany();
+            // console.log("student of student",context);
             return success("All students fetched successfully", students);
         },
         student: async (_parent, args, context) => {
+            // console.log("args are here",args)
             if (!context.userId) return failed("Not authenticated");
             const student = prisma.student.findUnique({ where: { studentId: args.studentId } });
 

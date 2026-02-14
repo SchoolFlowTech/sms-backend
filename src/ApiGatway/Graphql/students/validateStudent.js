@@ -22,7 +22,7 @@ export const validateStudent = (data) => {
     return failed("mobile number must be at least 10 digits");
   }
 
-  if (!data.class) {
+  if (!data.className) {
     return failed("Class is required");
   }
 

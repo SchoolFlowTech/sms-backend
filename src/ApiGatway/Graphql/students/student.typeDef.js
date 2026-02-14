@@ -11,7 +11,7 @@ export const StudentType = gql`
         mobileNumber: String!
         address: String!
 
-        class: String!
+        className: String!
         section: String!
         rollNumber: String!
         admissionDate: String!

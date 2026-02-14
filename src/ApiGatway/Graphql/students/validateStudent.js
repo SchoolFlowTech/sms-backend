@@ -1,4 +1,4 @@
-import { failed } from "../../../utils/response.js";
+import { failed } from "../../utils/response.js";
 
 export const validateStudent = (data) => {
 

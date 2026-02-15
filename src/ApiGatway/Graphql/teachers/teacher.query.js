@@ -6,6 +6,6 @@ export const teacherQuery = gql`
     page: Int
     limit: Int
     search: String): TeachersResponse
-    teacher(teacherId: Int!): getStudentByIdResponse
+    teacher(teacherId: Int!): TeacherResponse
   }
 `;

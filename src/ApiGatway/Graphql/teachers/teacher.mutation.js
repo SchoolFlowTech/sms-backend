@@ -3,7 +3,7 @@ import { gql } from "apollo-server-express";
 export const teacherMutation = gql`
   extend type Mutation {
     createTeacher(
-      userId: Int!
+      userId: Int
       firstName: String!
       lastName: String!
       gender: String!

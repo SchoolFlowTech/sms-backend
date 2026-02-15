@@ -1,10 +1,11 @@
-export const success = (message, data = null) => ({
-  status: 'success',
+export const success = (message, data) => ({
+  status: "success",
   message,
   data,
 });
 
 export const failed = (message) => ({
-  status: 'failed',
+  status: "failed",
   message,
+  data: null,
 });

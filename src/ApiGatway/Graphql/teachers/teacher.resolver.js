@@ -1,15 +1,37 @@
-import prisma from "../../../utils/prismaClient.js";
-import { success, failed } from "../../../utils/response.js";
+import prisma from "../../utils/prismaClient.js";
+import { success, failed } from "../../utils/response.js";
 
 export const teacherResolvers = {
   Query: {
-    teachers: async (_parent, _args, context) => {
+    teachers: async (_parent, args, context) => {
       try {
         if (!context.userId) return failed("Not authenticated");
 
-        const teachers = await prisma.teacher.findMany();
+        const page = args.page || 1;
+        const limit = args.limit || 10;
+        const skip = (page - 1) * limit;
 
-        return success("All teachers fetched successfully", teachers);
+        const teachers = await prisma.teacher.findMany({
+          skip,
+          take: limit,
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+
+        const totalCount = await prisma.teacher.count();
+
+        return {
+          status: "success",
+          message: "Teachers fetched successfully",
+          data: teachers,
+          pagination: {
+            totalCount,
+            currentPage: page,
+            totalPages: Math.ceil(totalCount / limit),
+            limit,
+          },
+        };
       } catch (error) {
         return failed(error.message);
       }
@@ -35,14 +57,23 @@ export const teacherResolvers = {
   Mutation: {
     createTeacher: async (_parent, args, context) => {
       try {
-        if (!context.userId) return failed("Not authenticated");
+        if (!context.userId) {
+          return failed("Not authenticated");
+        }
 
         const newTeacher = await prisma.teacher.create({
-          data: args,
+          data: {
+            ...args,
+            dateOfBirth: new Date(args.dateOfBirth),
+            joiningDate: new Date(args.joiningDate),
+          },
         });
+
+        console.log("Teacher created:", newTeacher);
 
         return success("Teacher created successfully", newTeacher);
       } catch (error) {
+        console.error("CREATE TEACHER ERROR:", error);
         return failed(error.message);
       }
     },

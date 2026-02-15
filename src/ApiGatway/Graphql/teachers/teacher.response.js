@@ -7,9 +7,17 @@ export const teacherResponse = gql`
     data: Teacher
   }
 
+  type Pagination {
+    totalCount: Int!
+    currentPage: Int!
+    totalPages: Int!
+    limit: Int!
+  }
+
   type TeachersResponse {
     status: String!
     message: String!
-    data: [Teacher!]
+    data: [Teacher]
+    pagination: Pagination
   }
 `;

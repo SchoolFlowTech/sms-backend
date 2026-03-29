@@ -5,7 +5,7 @@ export const employeeResolvers = {
   Query: {
     employees: async (_parent, args, context) => {
       try {
-        console.log("_parent",context)
+        console.log("_parent", context);
         if (!context.userId) return failed("Not authenticated");
 
         const page = args.page || 1;
@@ -58,20 +58,59 @@ export const employeeResolvers = {
       try {
         if (!context.userId) return failed("Not authenticated");
 
-        const employee = await prisma.employee.create({
-          data: {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            mobileNumber: data.mobileNumber,
-            address: data.address,
-            joiningDate: new Date(data.joiningDate),
-            salary: data.salary,
-            status: data.status,
-            type: data.type,
-          },
+        const result = await prisma.$transaction(async (tx) => {
+          // 1️⃣ Create Employee
+          const employee = await tx.employee.create({
+            data: {
+              firstName: data.firstName,
+              lastName: data.lastName,
+              mobileNumber: data.mobileNumber,
+              address: data.address,
+              joiningDate: new Date(data.joiningDate),
+              salary: data.salary,
+              status: data.status,
+              type: data.type,
+            },
+          });
+
+          // 2️⃣ If TEACHER → create Teacher record
+          if (data.type === "TEACHER") {
+            await tx.teacher.create({
+              data: {
+                employeeId: employee.id,
+
+                // ⚠️ you MUST send these from frontend
+                qualification: data.qualification || "N/A",
+                experience: data.experience || 0,
+                gender: data.gender || "UNKNOWN",
+                dateOfBirth: data.dateOfBirth
+                  ? new Date(data.dateOfBirth)
+                  : new Date(),
+              },
+            });
+          }
+
+          // (optional) other types
+          if (data.type === "ACCOUNTANT") {
+            await tx.accountant.create({
+              data: {
+                employeeId: employee.id,
+              },
+            });
+          }
+
+          if (data.type === "ADMIN_STAFF") {
+            await tx.adminStaff.create({
+              data: {
+                employeeId: employee.id,
+              },
+            });
+          }
+
+          return employee;
         });
 
-        return success("Employee created successfully", employee);
+        return success("Employee created successfully", result);
       } catch (error) {
         return failed(error.message);
       }

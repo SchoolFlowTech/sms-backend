@@ -28,7 +28,7 @@ app.use(
   })
 );
 
-app.use(express.json());
+// app.use(express.json());  // create problem in production
 
 app.get("/", (_req, res) => {
   res.status(200).type("text/plain").send("OK — GraphQL at /graphql");
